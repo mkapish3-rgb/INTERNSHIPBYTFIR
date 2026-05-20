@@ -662,3 +662,132 @@
     </div>
 
     <script>
+        // Create floating background particles
+        function createBackgroundParticles() {
+            const bg = document.getElementById('bgAnimation');
+            const emojis = ['🎂', '🎈', '✨', '🌟', '💛', '🎊', '🎉'];
+            
+            for (let i = 0; i < 15; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'floating-element';
+                particle.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 2 + 's';
+                particle.style.animationDuration = (4 + Math.random() * 3) + 's';
+                bg.appendChild(particle);
+            }
+        }
+
+        createBackgroundParticles();
+
+        // CONFETTI EXPLOSION
+        function celebrateConfetti() {
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                
+                const colors = ['#FF6B9D', '#FFD700', '#FFA500', '#667eea', '#764ba2', '#00ff88', '#ff006e'];
+                confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                
+                const startX = Math.random() * window.innerWidth;
+                const startY = Math.random() * window.innerHeight;
+                const endX = (Math.random() - 0.5) * 400;
+                const endY = Math.random() * 500 + 200;
+                const rotation = Math.random() * 720;
+                
+                confetti.style.left = startX + 'px';
+                confetti.style.top = startY + 'px';
+                
+                document.body.appendChild(confetti);
+                
+                const animation = confetti.animate([
+                    {
+                        transform: `translate(0, 0) rotate(0deg)`,
+                        opacity: 1
+                    },
+                    {
+                        transform: `translate(${endX}px, ${endY}px) rotate(${rotation}deg)`,
+                        opacity: 0
+                    }
+                ], {
+                    duration: 3000 + Math.random() * 1000,
+                    easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+                    iterations: 1
+                });
+                
+                animation.onfinish = () => confetti.remove();
+            }
+        }
+
+        // SPARKLE EFFECT
+        function sparkleEffect() {
+            const colors = ['#FFD700', '#FFA500', '#FF69B4', '#00ff88', '#00d4ff'];
+            
+            for (let i = 0; i < 50; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle sparkle-item';
+                sparkle.textContent = '✨';
+                sparkle.style.fontSize = (1 + Math.random() * 1.5) + 'em';
+                
+                const x = Math.random() * window.innerWidth;
+                const y = Math.random() * window.innerHeight;
+                
+                sparkle.style.left = x + 'px';
+                sparkle.style.top = y + 'px';
+                sparkle.style.color = colors[Math.floor(Math.random() * colors.length)];
+                
+                document.body.appendChild(sparkle);
+                
+                setTimeout(() => sparkle.remove(), 600);
+            }
+        }
+
+        // HEART EXPLOSION
+        function heartExplosion() {
+            const centerX = window.innerWidth / 2;
+            const centerY = window.innerHeight / 2;
+            
+            for (let i = 0; i < 30; i++) {
+                const heart = document.createElement('div');
+                heart.textContent = '💛';
+                heart.style.position = 'fixed';
+                heart.style.left = centerX + 'px';
+                heart.style.top = centerY + 'px';
+                heart.style.fontSize = (1.5 + Math.random() * 1) + 'em';
+                heart.style.pointerEvents = 'none';
+                heart.style.zIndex = '9999';
+                
+                document.body.appendChild(heart);
+                
+                const angle = (i / 30) * Math.PI * 2;
+                const velocity = 3 + Math.random() * 3;
+                const endX = Math.cos(angle) * 300 * velocity;
+                const endY = Math.sin(angle) * 300 * velocity;
+                
+                const animation = heart.animate([
+                    {
+                        transform: 'translate(0, 0) scale(1)',
+                        opacity: 1
+                    },
+                    {
+                        transform: `translate(${endX}px, ${endY}px) scale(0)`,
+                        opacity: 0
+                    }
+                ], {
+                    duration: 2500,
+                    easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+                });
+                
+                animation.onfinish = () => heart.remove();
+            }
+        }
+
+        // Auto-scroll chat messages
+        const chatMessages = document.querySelector('.chat-messages');
+        if (chatMessages) {
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+    </script>
+</body>
+</html>
