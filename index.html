@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday Didi</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Inter:wght@400;500;600&display=swap');
+
+  :root{
+    --plum:#2B0B26;
+    --plum-deep:#1A0618;
+    --gold:#F4A93A;
+    --rani:#E6417E;
+    --cream:#FFF6EC;
+    --flame:#FFD166;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+
+  body{
+    margin:0;
+    background:var(--plum-deep);
+    font-family:'Inter',sans-serif;
+    color:var(--cream);
+    overflow-x:hidden;
+  }
+
+  section{
+    min-height:100vh;
+    width:100%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:60px 20px;
+    position:relative;
+    scroll-snap-align:start;
+  }
+
+  .scroller{
+    height:100vh;
+    overflow-y:auto;
+    scroll-snap-type:y mandatory;
+  }
+
+  #hero{background:radial-gradient(ellipse at 50% 0%, var(--plum) 0%, var(--plum-deep) 70%);}
+  #balloons{background:radial-gradient(ellipse at 50% 100%, #3a1032 0%, var(--plum-deep) 70%);}
+  #guestbook{background:radial-gradient(ellipse at 50% 0%, #3a1032 0%, var(--plum-deep) 70%);}
+  #outro{background:var(--plum-deep);}
+
+  .navdots{
+    position:fixed;right:16px;top:50%;transform:translateY(-50%);
+    display:flex;flex-direction:column;gap:12px;z-index:50;
+  }
+  .navdots button{
+    width:9px;height:9px;border-radius:50%;border:1px solid var(--gold);
+    background:transparent;cursor:pointer;padding:0;
+  }
+  .navdots button.active{background:var(--gold);}
+
+  .eyebrow{font-size:15px;color:var(--gold);margin-bottom:6px;text-align:center;}
+
+  h1,h2{font-family:'Fraunces',serif;font-weight:700;text-align:center;line-height:1.15;margin:0 0 10px;}
+  h1{font-size:clamp(32px,7vw,54px);}
+  h2{font-size:clamp(26px,5.5vw,38px);color:var(--gold);}
+
+  .sub{font-size:16px;color:#E8C9DA;text-align:center;margin-bottom:40px;max-width:360px;}
+
+  .cake-wrap{position:relative;width:260px;height:260px;margin-bottom:16px;}
+  svg{width:100%;height:100%;overflow:visible;}
+  .candle-flame{transform-origin:bottom center;animation:flicker 1.4s ease-in-out infinite;cursor:pointer;}
+  @keyframes flicker{0%,100%{transform:scaleY(1) rotate(-2deg);}50%{transform:scaleY(1.08) rotate(2deg);}}
+  .flame-out{animation:none !important;opacity:0;transform:scaleY(0);transition:opacity .25s ease, transform .25s ease;}
+  .smoke{opacity:0;pointer-events:none;}
+  .smoke.show{animation:smokeRise 1s ease-out forwards;}
+  @keyframes smokeRise{0%{opacity:0.6;transform:translateY(0) scale(1);}100%{opacity:0;transform:translateY(-30px) scale(1.8);}}
+
+  .hint{font-size:14px;color:#C9A0B8;margin-bottom:4px;min-height:20px;}
+
+  .reveal{text-align:center;max-width:400px;opacity:0;transform:translateY(12px);transition:opacity .6s ease, transform .6s ease;margin-top:8px;}
+  .reveal.show{opacity:1;transform:translateY(0);}
+  .reveal p{font-size:16px;line-height:1.6;}
+
+  .scrolldown{position:absolute;bottom:22px;font-size:13px;color:#C9A0B8;display:flex;flex-direction:column;align-items:center;gap:4px;}
+  .scrolldown span{animation:bounce 1.6s infinite;}
+  @keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(6px);}}
+
+  .balloon-field{
+    position:relative;width:100%;max-width:520px;height:380px;
+    display:flex;align-items:flex-end;justify-content:center;gap:18px;flex-wrap:wrap;
+  }
+  .balloon{
+    width:56px;height:70px;border-radius:50% 50% 50% 50%/58% 58% 42% 42%;
+    cursor:pointer;position:relative;animation:sway 3.4s ease-in-out infinite;
+    transition:transform .15s ease, opacity .35s ease;
+  }
+  .balloon::after{
+    content:'';position:absolute;left:50%;bottom:-38px;width:1px;height:38px;
+    background:#C9A0B8;transform:translateX(-50%);
+  }
+  .balloon:nth-child(1){background:var(--rani);animation-delay:0s;}
+  .balloon:nth-child(2){background:var(--gold);animation-delay:.4s;}
+  .balloon:nth-child(3){background:#8f6bd6;animation-delay:.8s;}
+  .balloon:nth-child(4){background:var(--rani);animation-delay:1.2s;}
+  .balloon:nth-child(5){background:var(--gold);animation-delay:1.6s;}
+  .balloon:nth-child(6){background:#8f6bd6;animation-delay:2s;}
+  @keyframes sway{0%,100%{transform:translateY(0) rotate(-3deg);}50%{transform:translateY(-14px) rotate(3deg);}}
+  .balloon.popped{opacity:0;transform:scale(1.6);pointer-events:none;}
+
+  .wish-bubble{
+    position:absolute;bottom:110%;left:50%;transform:translateX(-50%) scale(0.8);
+    background:var(--cream);color:var(--plum-deep);font-size:12.5px;line-height:1.35;
+    padding:10px 12px;border-radius:10px;width:150px;text-align:center;
+    opacity:0;transition:opacity .3s ease, transform .3s ease;pointer-events:none;
+  }
+  .wish-bubble.show{opacity:1;transform:translateX(-50%) scale(1);}
+  .wish-bubble::after{
+    content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);
+    border:6px solid transparent;border-top-color:var(--cream);
+  }
+
+  .balloon-hint{font-size:14px;color:#C9A0B8;margin-top:24px;}
+
+  .gb-form{width:100%;max-width:400px;display:flex;flex-direction:column;gap:10px;margin-bottom:36px;}
+  .gb-form input, .gb-form textarea{
+    font-family:'Inter',sans-serif;font-size:15px;
+    background:rgba(255,255,255,0.06);border:1px solid rgba(244,169,58,0.4);
+    border-radius:8px;padding:10px 12px;color:var(--cream);resize:none;
+  }
+  .gb-form input:focus, .gb-form textarea:focus{outline:none;border-color:var(--gold);}
+  .gb-form button{
+    font-family:'Inter',sans-serif;font-weight:600;font-size:15px;
+    background:var(--rani);color:var(--cream);border:none;border-radius:8px;
+    padding:11px;cursor:pointer;transition:background .2s ease;
+  }
+  .gb-form button:hover{background:#f05a91;}
+
+  .gb-list{width:100%;max-width:400px;display:flex;flex-direction:column;gap:12px;}
+  .gb-card{background:rgba(255,255,255,0.05);border-left:3px solid var(--gold);border-radius:6px;padding:12px 14px;}
+  .gb-card .name{font-weight:600;color:var(--gold);font-size:14px;margin-bottom:4px;}
+  .gb-card .msg{font-size:14.5px;line-height:1.5;color:var(--cream);}
+
+  .outro-msg{max-width:380px;text-align:center;}
+  .outro-msg p{font-size:16px;line-height:1.6;}
+  .heart{font-size:34px;margin-top:14px;animation:pulse 1.4s ease-in-out infinite;}
+  @keyframes pulse{0%,100%{transform:scale(1);}50%{transform:scale(1.15);}}
+
+  .confetti{position:fixed;top:-10px;width:8px;height:14px;opacity:0.9;pointer-events:none;animation:fall linear forwards;z-index:60;}
+  @keyframes fall{to{transform:translateY(110vh) rotate(540deg);}}
+</style>
+</head>
+<body>
+
+<div class="navdots" id="navdots">
+  <button data-target="hero" class="active"></button>
+  <button data-target="balloons"></button>
+  <button data-target="guestbook"></button>
+  <button data-target="outro"></button>
+</div>
+
+<div class="scroller">
+
+  <section id="hero">
+    <div class="eyebrow">आज का दिन खास है</div>
+    <h1>Happy Birthday, Didi!</h1>
+    <div class="sub">Candles ko click karke bujha do, phir dekho kya hota hai.</div>
+
+    <div class="cake-wrap">
+      <svg viewBox="0 0 200 200">
+        <ellipse cx="100" cy="175" rx="85" ry="10" fill="#4a1740"/>
+        <rect x="45" y="120" width="110" height="45" rx="6" fill="#7a2f57"/>
+        <rect x="45" y="120" width="110" height="10" fill="#8f3d67"/>
+        <rect x="60" y="90" width="80" height="35" rx="6" fill="#E6417E"/>
+        <rect x="60" y="90" width="80" height="9" fill="#f05a91"/>
+        <rect x="75" y="65" width="50" height="30" rx="6" fill="#F4A93A"/>
+        <rect x="75" y="65" width="50" height="8" fill="#ffbf5c"/>
+        <circle cx="65" cy="90" r="5" fill="#f05a91"/>
+        <circle cx="90" cy="90" r="4" fill="#f05a91"/>
+        <circle cx="115" cy="90" r="5" fill="#f05a91"/>
+        <circle cx="135" cy="90" r="4" fill="#f05a91"/>
+
+        <g id="candle1">
+          <rect x="80" y="45" width="6" height="22" fill="#FFF6EC"/>
+          <g class="candle-flame" data-candle="1">
+            <ellipse cx="83" cy="42" rx="4" ry="8" fill="var(--flame)"/>
+            <ellipse cx="83" cy="43" rx="2" ry="4.5" fill="#ff8a3d"/>
+          </g>
+          <g class="smoke" data-smoke="1"><ellipse cx="83" cy="40" rx="3" ry="5" fill="#cfc7c7"/></g>
+        </g>
+        <g id="candle2">
+          <rect x="97" y="40" width="6" height="27" fill="#FFF6EC"/>
+          <g class="candle-flame" data-candle="2">
+            <ellipse cx="100" cy="37" rx="4" ry="8" fill="var(--flame)"/>
+            <ellipse cx="100" cy="38" rx="2" ry="4.5" fill="#ff8a3d"/>
+          </g>
+          <g class="smoke" data-smoke="2"><ellipse cx="100" cy="35" rx="3" ry="5" fill="#cfc7c7"/></g>
+        </g>
+        <g id="candle3">
+          <rect x="114" y="45" width="6" height="22" fill="#FFF6EC"/>
+          <g class="candle-flame" data-candle="3">
+            <ellipse cx="117" cy="42" rx="4" ry="8" fill="var(--flame)"/>
+            <ellipse cx="117" cy="43" rx="2" ry="4.5" fill="#ff8a3d"/>
+          </g>
+          <g class="smoke" data-smoke="3"><ellipse cx="117" cy="40" rx="3" ry="5" fill="#cfc7c7"/></g>
+        </g>
+      </svg>
+    </div>
+
+    <div class="hint" id="hint">3 candles baaki hain</div>
+    <div class="reveal" id="reveal">
+      <p>Janamdin Mubarak, Didi 🎂 — Aap jitni caring ho utni hi khaas bhi ho. Yeh saal khushiyaan aur achi health leke aaye.</p>
+    </div>
+
+    <div class="scrolldown"><span>↓</span>scroll karo</div>
+  </section>
+
+  <section id="balloons">
+    <div class="eyebrow">Balloon phodo</div>
+    <h2>Har balloon mein ek wish hai</h2>
+    <div class="sub">Click karke phodo, wish padho.</div>
+    <div class="balloon-field" id="balloonField">
+      <div class="balloon" data-wish="Health hamesha aapke saath rahe, Didi."><div class="wish-bubble"></div></div>
+      <div class="balloon" data-wish="Jo bhi sapne dekhe hain, sab poore hon."><div class="wish-bubble"></div></div>
+      <div class="balloon" data-wish="Zindagi mein utni hi khushiyaan milein jitna pyaar aap baatti ho."><div class="wish-bubble"></div></div>
+      <div class="balloon" data-wish="Yeh saal aapke liye naye mauke leke aaye."><div class="wish-bubble"></div></div>
+      <div class="balloon" data-wish="Hansi aur sukoon kabhi kam na ho."><div class="wish-bubble"></div></div>
+      <div class="balloon" data-wish="Aap jaisi Didi milna kismat ki baat hai."><div class="wish-bubble"></div></div>
+    </div>
+    <div class="balloon-hint" id="balloonHint">6 balloons baaki</div>
+  </section>
+
+  <section id="guestbook">
+    <div class="eyebrow">Sabki taraf se</div>
+    <h2>Guestbook mein wish likho</h2>
+    <div class="sub">Jo bhi Didi ko wish karna chahe, yahan likh sakta hai.</div>
+    <div class="gb-form">
+      <input type="text" id="gbName" placeholder="Naam" maxlength="30">
+      <textarea id="gbMsg" rows="3" placeholder="Apni wish likho..." maxlength="200"></textarea>
+      <button id="gbSubmit">Wish add karo</button>
+    </div>
+    <div class="gb-list" id="gbList"></div>
+  </section>
+
+  <section id="outro">
+    <div class="outro-msg">
+      <div class="eyebrow">Aakhir mein</div>
+      <h2>Happy Birthday, Didi</h2>
+      <p>Yeh chhoti si website usi pyaar ka ek tukda hai jo hum aapke liye rakhte hain. Din khaas ho, cake meetha ho, aur saal bhar khushiyaan hi khushiyaan.</p>
+      <div class="heart">❤️</div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+  const scroller = document.querySelector('.scroller');
+  const sections = document.querySelectorAll('section');
+  const dots = document.querySelectorAll('.navdots button');
+
+  dots.forEach(dot => {
+    dot.addEventListener('click', () => {
+      document.getElementById(dot.dataset.target).scrollIntoView({behavior:'smooth'});
+    });
+  });
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting){
+        dots.forEach(d => d.classList.toggle('active', d.dataset.target === entry.target.id));
+      }
+    });
+  }, {root: scroller, threshold: 0.5});
+  sections.forEach(s => observer.observe(s));
+
+  const flames = document.querySelectorAll('.candle-flame');
+  const hint = document.getElementById('hint');
+  const reveal = document.getElementById('reveal');
+  let blownOut = 0;
+  const totalFlames = flames.length;
+
+  flames.forEach(flame => {
+    flame.addEventListener('click', () => {
+      if (flame.classList.contains('flame-out')) return;
+      flame.classList.add('flame-out');
+      const id = flame.getAttribute('data-candle');
+      document.querySelector(`[data-smoke="${id}"]`).classList.add('show');
+      blownOut++;
+      const remaining = totalFlames - blownOut;
+      if (remaining > 0){
+        hint.textContent = remaining + (remaining === 1 ? ' candle baaki hai' : ' candles baaki hain');
+      } else {
+        hint.textContent = 'Wish kar li? 🎈';
+        launchConfetti();
+        setTimeout(() => reveal.classList.add('show'), 400);
+      }
+    });
+  });
+
+  function launchConfetti(){
+    const colors = ['#F4A93A','#E6417E','#FFF6EC','#ff8a3d'];
+    for (let i = 0; i < 90; i++){
+      const c = document.createElement('div');
+      c.className = 'confetti';
+      c.style.left = Math.random() * 100 + 'vw';
+      c.style.background = colors[Math.floor(Math.random()*colors.length)];
+      c.style.animationDuration = (2.5 + Math.random() * 2) + 's';
+      c.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+      document.body.appendChild(c);
+      setTimeout(() => c.remove(), 5000);
+    }
+  }
+
+  const balloons = document.querySelectorAll('.balloon');
+  const balloonHint = document.getElementById('balloonHint');
+  let poppedCount = 0;
+
+  balloons.forEach(balloon => {
+    balloon.addEventListener('click', () => {
+      if (balloon.classList.contains('popped')) return;
+      balloon.classList.add('popped');
+      const bubble = balloon.querySelector('.wish-bubble');
+      bubble.textContent = balloon.dataset.wish;
+      bubble.classList.add('show');
+      bubble.style.position = 'fixed';
+      const rect = balloon.getBoundingClientRect();
+      bubble.style.left = (rect.left + rect.width/2) + 'px';
+      bubble.style.top = (rect.top - 10) + 'px';
+      bubble.style.transform = 'translate(-50%,-100%)';
+      poppedCount++;
+      const remaining = balloons.length - poppedCount;
+      balloonHint.textContent = remaining > 0 ? remaining + ' balloons baaki' : 'Saari wishes padh li! 🎉';
+    });
+  });
+
+  const gbList = document.getElementById('gbList');
+  const gbName = document.getElementById('gbName');
+  const gbMsg = document.getElementById('gbMsg');
+  const gbSubmit = document.getElementById('gbSubmit');
+
+  function loadWishes(){
+    const stored = JSON.parse(localStorage.getItem('didiWishes') || 'null');
+    return stored || [
+      {name:'Family', msg:'Happy Birthday Didi, bahut khush raho!'},
+      {name:'Friends', msg:'Party toh banti hai is baar!'}
+    ];
+  }
+
+  function renderWishes(wishes){
+    gbList.innerHTML = '';
+    wishes.slice().reverse().forEach(w => {
+      const card = document.createElement('div');
+      card.className = 'gb-card';
+      card.innerHTML = `<div class="name"></div><div class="msg"></div>`;
+      card.querySelector('.name').textContent = w.name;
+      card.querySelector('.msg').textContent = w.msg;
+      gbList.appendChild(card);
+    });
+  }
+
+  let wishes = loadWishes();
+  renderWishes(wishes);
+
+  gbSubmit.addEventListener('click', () => {
+    const name = gbName.value.trim() || 'Anonymous';
+    const msg = gbMsg.value.trim();
+    if (!msg) return;
+    wishes.push({name, msg});
+    localStorage.setItem('didiWishes', JSON.stringify(wishes));
+    renderWishes(wishes);
+    gbName.value = '';
+    gbMsg.value = '';
+  });
+</script>
+
+</body>
+</html>
